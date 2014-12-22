@@ -1,6 +1,9 @@
 #!/bin/sh
-# Vodafone router script
+# vodafone router script
 # v. 0.6
+# WORK IN PROGRESS
+# Originally by zipleen
+# Vodafone IPTV Adaptation by EditioN-
 #
 # 22/12/2014 - Versão modificada para Vodafone IPTV, Thanks to zipleen!! (by EditioN-)
 # 24/12/2012 - pequena modificao por causa do /21 para /20 - voip stuff  (by zipleen)
