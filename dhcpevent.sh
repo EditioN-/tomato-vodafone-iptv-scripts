@@ -2,7 +2,8 @@
 # vodafone router script
 # v. 0.6
 # WORK IN PROGRESS
-#
+# Originally by zipleen
+# Vodafone IPTV Adaptation by EditioN-
 # 22/12/2014 - Adaptação do script para Vodafone IPTV. Este serviço usa bastantes mais redes que o MEO, estas foram portadas do thomson
 # 24/12/2012 - o voip usa a gama a seguir ah que eu tinha definido, apesar da meo so usar essa gama de ips, tive de meter o resto da gama
 # 25/12/2010 - rp_filter tem de estar off para multicast funcionar!! tomato fixed!
