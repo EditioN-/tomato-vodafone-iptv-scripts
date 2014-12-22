@@ -1,7 +1,9 @@
 #!/bin/sh
-# meo router script
-# by zipleen <at> gmail <dot> com
-# v. 0.5
+# vodafone router script
+# v. 0.6
+# WORK IN PROGRESS
+#
+# 22/12/2014 - Adaptação do script para Vodafone IPTV. Este serviço usa bastantes mais redes que o MEO, estas foram portadas do thomson
 # 24/12/2012 - o voip usa a gama a seguir ah que eu tinha definido, apesar da meo so usar essa gama de ips, tive de meter o resto da gama
 # 25/12/2010 - rp_filter tem de estar off para multicast funcionar!! tomato fixed!
 # 07/11/2010 - wireless ebtables drop multicast
@@ -28,41 +30,93 @@ bound() {
   # o route original - a rota seguinte ja trata desta, ptt esta n eh necessaria
   #route add -net 10.194.128.0 netmask $subnet gw $router dev $iface 
   
-  # 10.173.192.0 - 10.173.255.254
-  ## 10.173.192.0 / 255.255.192.0 / 18
-  ## http://www.aboutmyip.com/AboutMyXApp/SubnetCalculator.jsp?ipAddress=10.173.192.0&cidr=18
-  #route add -net 10.173.192.0 netmask 255.255.192.0 gw $router dev $iface 
-  # parece que ha 10.172.x.x a mandarem streams iptv!
-  route add -net 10.173.0.0 netmask 255.255.0.0 gw $router dev $iface
+  route add -net 212.18.177.96 netmask 255.255.255.224 gw $router dev $iface
  
-  # 194.65.46.0 - 194.65.47.254
-  ## 194.65.46.0 / 255.255.254.0 / 23 
-  ## http://www.aboutmyip.com/AboutMyXApp/SubnetCalculator.jsp?ipAddress=194.65.46.0&cidr=23 
-  route add -net 194.65.46.0 netmask 255.255.254.0 gw $router dev $iface
+  # rule add chain=qos_user_labels index=1 dstip=IPTVnetVDF log=disabled state=enabled label=Video
+  # add name=IPTVnetVDF type=ip addr=95.136.[4-5].* mask=23
+  ## 95.136.4.1 -> 95.136.5.254
+  ## 95.136.4.0 / 255.255.254.0 / 23
+  route add -net 95.136.4.0 netmask 255.255.254.0 gw $router dev $iface
   
-  # 213.13.[16-24]
-  ## isto eh estranho, este aqui so da ate 23.254! sera que o anterior era a 46.0 -> 46.254 em vez de 46.0 -> 47.254 ?!
-  ## 213.13.16.0 / 255.255.248.0 / 21
-  ## http://www.aboutmyip.com/AboutMyXApp/SubnetCalculator.jsp?ipAddress=213.13.16.0&cidr=21
-  route add -net 213.13.16.0 netmask 255.255.240.0 gw $router dev $iface 
+  # rule add chain=qos_user_labels index=1 dstip=IPTVnetVDF log=disabled state=enabled label=Video
+  # add name=IPTVnetVDF type=ip addr=213.30.36.212 mask=32
+  ## 213.30.36.212 / 255.255.255.255
+  route add -net 213.30.36.212 netmask 255.255.255.255 gw $router dev $iface
+  route add -net 87.103.116.0 netmask 255.255.252.0 gw $router dev $iface
+  
+  # rule add chain=qos_user_labels index=1 dstip=IPTVnetVDF log=disabled state=enabled label=Video
+  # add name=IPTVnetVDF type=ip addr=10.20.100.[0-31] mask=27
+  ## 10.20.100.1 -> 10.20.100.30
+  ## 10.20.100.0 / 255.255.255.224 / 27
+  route add -net 10.20.100.0 netmask 255.255.255.224 gw $router dev $iface
+  
+  # rule add chain=qos_user_labels index=1 dstip=IPTVnetVDF log=disabled state=enabled label=Video
+  # add name=IPTVnetVDF type=ip addr=87.103.[116-119].* mask=22
+  ## 87.103.116.1 -> 87.103.119.254
+  ## 87.103.116.0 / 255.255.252.0 / 22
+  route add -net 95.136.4.112 netmask 255.255.252.0 gw $router dev $iface
+  
+  # rule add chain=qos_user_labels index=1 dstip=IPTVnetVDF log=disabled state=enabled label=Video
+  # add name=IPTVnetVDF type=ip addr=93.108.253.[128-255] mask=25
+  ## 93.108.253.129 -> 93.108.253.254
+  ## 93.108.253.128 / 255.255.255.128 / 25
+  route add -net 93.108.253.128 netmask 255.255.255.128 gw $router dev $iface
+  
+  # rule add chain=qos_user_labels index=1 dstip=IPTVnetVDF log=disabled state=enabled label=Video
+  # add name=IPTVnetVDF type=ip addr=10.20.110.[0-31] mask=27
+  ## 10.20.110.1 -> 10.20.110.30
+  ## 10.20.110.0 / 255.255.255.224 / 27
+  route add -net 10.20.110.0 netmask 255.255.255.224 gw $router dev $iface
+  
+  # rule add chain=qos_user_labels index=1 dstip=IPTVnetVDF log=disabled state=enabled label=Video
+  # add name=IPTVnetVDF type=ip addr=10.20.120.[0-31] mask=27
+  ## 10.20.120.1 -> 10.20.120.30
+  ## 10.20.120.0 / 255.255.255.224 / 27
+  route add -net 10.20.120.0 netmask 255.255.255.224 gw $router dev $iface
+  
+  # rule add chain=qos_user_labels index=1 dstip=IPTVnetVDF log=disabled state=enabled label=Video
+  # add name=IPTVnetVDF type=ip addr=10.20.150.[0-31] mask=27
+  ## 10.20.150.1 -> 10.20.150.30
+  ## 10.20.150.0 / 255.255.255.224 / 27
+  route add -net 10.20.150.0 netmask 255.255.255.224 gw $router dev $iface
+  
+  # rule add chain=qos_user_labels index=1 dstip=IPTVnetVDF log=disabled state=enabled label=Video
+  # add name=IPTVnetVDF type=ip addr=213.30.43.16 mask=32
+  ## 213.30.43.16 / 255.255.255.255
+  route add -net 213.30.43.16 netmask 255.255.255.255 gw $router dev $iface
+  
+  # rule add chain=qos_user_labels index=1 dstip=IPTVnetVDF log=disabled state=enabled label=Video
+  # add name=IPTVnetVDF type=ip addr=213.30.36.[208-215] mask=29
+  ## 213.30.36.209 -> 213.30.36.215
+  ## 213.30.36.208 / 255.255.255.248 / 29
+  route add -net 213.30.36.208 netmask 255.255.255.248 gw $router dev $iface
+  
+  # rule add chain=qos_user_labels index=1 dstip=IPTVnetVDF log=disabled state=enabled label=Video
+  # add name=IPTVnetVDF type=ip addr=10.163.114.0/24 mask=24
+  ## 10.163.114.1 -> 10.163.114.254
+  ## 10.163.114.0 / 255.255.255.0 / 24
+  route add -net 10.163.114.0 netmask 255.255.255.0 gw $router dev $iface
    
   # FORWARD parece ser preciso para passar os packets daquelas outras redes para a rede local
   # SNAT para a br0 conseguir aceder ah nossa redes privadas iptv
   echo "#!/bin/sh" > /tmp/iptablesiptv.sh 
-  echo "if [ \`iptables -L -t nat -n | grep 194.65.46.0/23 | wc -l\` -eq 0 ]; then" >> /tmp/iptablesiptv.sh
+  echo "if [ \`iptables -L -t nat -n | grep 95.136.4.0/23 | wc -l\` -eq 0 ]; then" >> /tmp/iptablesiptv.sh
   echo "iptables -I INPUT 1 -p igmp -j ACCEPT" >> /tmp/iptablesiptv.sh
   echo "iptables -I INPUT 1 -i $iface -p udp --dst 224.0.0.0/4 --dport 1025: -j ACCEPT" >> /tmp/iptablesiptv.sh
   # pela razao la de cima, vamos adicionar a 10.173.* ao forward
   #echo "iptables -I INPUT 1 -i $iface -s 194.65.46.0/23 -p udp -j ACCEPT" >> /tmp/iptablesiptv.sh
   #echo "iptables -I FORWARD -i $iface -o br0 -s 10.173.192.0/18 -j ACCEPT" >> /tmp/iptablesiptv.sh 
-  echo "iptables -I FORWARD -i $iface -o br0 -s 10.173.0.0/16 -j ACCEPT" >> /tmp/iptablesiptv.sh
-  echo "iptables -I FORWARD -i $iface -o br0 -s 194.65.46.0/23 -j ACCEPT" >> /tmp/iptablesiptv.sh
-  echo "iptables -I FORWARD -i $iface -o br0 -s 213.13.16.0/20 -j ACCEPT" >> /tmp/iptablesiptv.sh
+  echo "iptables -I FORWARD -i $iface -o br0 -s 10.70.0.0/16 -j ACCEPT" >> /tmp/iptablesiptv.sh
+  echo "iptables -I FORWARD -i $iface -o br0 -s 95.136.4.0/23 -j ACCEPT" >> /tmp/iptablesiptv.sh
+  echo "iptables -I FORWARD -i $iface -o br0 -s 212.18.177.96/27 -j ACCEPT" >> /tmp/iptablesiptv.sh
+  echo "iptables -I FORWARD -i $iface -o br0 -s 87.103.116.0/22 -j ACCEPT" >> /tmp/iptablesiptv.sh
+  echo "iptables -I FORWARD -i $iface -o br0 -s 93.108.253.128/25 -j ACCEPT" >> /tmp/iptablesiptv.sh
   # o router original parece nao dar acesso ah rede 10.x ...
   #echo "iptables --table nat -I POSTROUTING 1 --out-interface $iface --source 192.168.1.0/24 --destination 10.173.192.0/18 --jump SNAT --to-source $ip" >> /tmp/iptablesiptv.sh
   #echo "iptables --table nat -I POSTROUTING 1 --out-interface $iface --source 192.168.1.0/24 --destination 10.173.0.0/16 --jump SNAT --to-source $ip" >> /tmp/iptablesiptv.sh
-  echo "iptables --table nat -I POSTROUTING 1 --out-interface $iface --source 192.168.1.0/24 --destination 194.65.46.0/23 --jump SNAT --to-source $ip" >> /tmp/iptablesiptv.sh
-  echo "iptables --table nat -I POSTROUTING 1 --out-interface $iface --source 192.168.1.0/24 --destination 213.13.16.0/20 --jump SNAT --to-source $ip" >> /tmp/iptablesiptv.sh
+  echo "iptables --table nat -I POSTROUTING 1 --out-interface $iface --source 192.168.1.0/24 --destination 95.136.4.0/23 --jump SNAT --to-source $ip" >> /tmp/iptablesiptv.sh
+  echo "iptables --table nat -I POSTROUTING 1 --out-interface $iface --source 192.168.1.0/24 --destination 212.18.177.96/20 --jump SNAT --to-source $ip" >> /tmp/iptablesiptv.sh
+  echo "iptables --table nat -I POSTROUTING 1 --out-interface $iface --source 192.168.1.0/24 --destination 87.103.116.0/22 --jump SNAT --to-source $ip" >> /tmp/iptablesiptv.sh
   
   # ebtables necessita build > 52!
   #echo "ebtables -t nat -F" >> /tmp/iptablesiptv.sh 
