@@ -1,6 +1,7 @@
 #!/bin/sh
-# vodafone router script
+# Vodafone router script
 # v. 0.6
+#
 # 22/12/2014 - Versão modificada para Vodafone IPTV, Thanks to zipleen!! (by EditioN-)
 # 24/12/2012 - pequena modificao por causa do /21 para /20 - voip stuff  (by zipleen)
 # 11/12/2010 - detectao da directoria pelo dirname e deteccao do programa de igmp a usar para facilitar a vida no ddwrt (by zipleen)
